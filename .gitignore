@@ -51,7 +51,7 @@ int main()
 
 void readData()
 {
-	FILE *fp = fopen("F:\\athletes.txt", "r");
+	FILE *fp = fopen("athletes.txt", "r");
 	char *token;
 	char delim[2] = "	";
 	char line[200];
