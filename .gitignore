@@ -1,29 +1,147 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+#include "stdafx.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#pragma warning(disable: 4996)
+struct result
+{
+	char *name;
+	int age;
+	char *country;
+	int year;
+	char *sport;
+	int gold;
+	int silver;
+	int bronze;
+	int total;
+	struct result *next;
+};
 
-# Precompiled Headers
-*.gch
-*.pch
+struct result *first;
+int syear;
+char ssport[12];
+	
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
 
-# Fortran module files
-*.mod
-*.smod
+void readData();
+void findRecord(char *sport, int yearx);
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+int main()
+{
+	int i = 0;
+	readData();
+	while (i != 1){
+		printf("\n\n\nEnter '0' in any field to exit program\n\n");
+		printf("Enter year: ");
+		scanf("%d", &syear);
+		if (syear == 0){
+			return 0;
+		}
+		printf("\nEnter sport: ");
+		scanf("%s", &ssport);
+		if (ssport == "0"){
+			return 0;
+		}
+		printf("\n%-30s%-5s%-19s%-10s%-15s%-9s%-9s%-9s%-9s\n", "Name", "Age", "Country", "Year", "sport", "#Gold", "#Silver", "#Bronze", "#Total");
+		puts("================================================================================");
+		findRecord(ssport, syear);
+	}
+	return 0;
+}
 
-# Executables
-*.exe
-*.out
-*.app
+void readData()
+{
+	FILE *fp = fopen("F:\\athletes.txt", "r");
+	char *token;
+	char delim[2] = "	";
+	char line[200];
+	struct result *last = NULL;
+	struct result *current = NULL;
+
+	if (fp == NULL)
+	{
+		printf("Error opening file ! \n");
+		return;
+	}
+
+
+	while (!feof(fp))
+	{
+		fgets(line, 200, fp);
+		if (first == NULL)
+		{
+			first = (struct result *)malloc(sizeof(struct result));
+			first->next = NULL;
+			current = first;
+		}
+		else
+		{
+			last = (struct result *)malloc(sizeof(struct result));
+			current->next = last;
+			current = last;
+			current->next = NULL;
+		}
+		if ((token = strtok(line, delim)) != NULL)
+		{
+			current->name = (char *)malloc(sizeof(char)*(strlen(token) + 1));
+			strcpy(current->name, token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->age = (int)malloc(sizeof(int));
+			current->age = atoi(token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->country = (char *)malloc(sizeof(char)*(strlen(token) + 1));
+			strcpy(current->country, token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->year = (int)malloc(sizeof(int));
+			current->year = atoi(token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->sport = (char *)malloc(sizeof(char)*(strlen(token) + 1));
+			strcpy(current->sport, token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->gold = (int)malloc(sizeof(int));
+			current->gold = atoi(token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->silver = (int)malloc(sizeof(int));
+			current->silver = atoi(token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->bronze = (int)malloc(sizeof(int));
+			current->bronze = atoi(token);
+		}
+		if ((token = strtok(NULL, delim)) != NULL)
+		{
+			current->total = (int)malloc(sizeof(int));
+			current->total = atoi(token);
+		}
+	}
+
+	fclose(fp);
+}
+
+void findRecord(char *sport, int yearx)
+{
+	struct result *current;
+	current = first;
+	while (current != NULL)
+	{
+		if (current->year == yearx && !strcmp(sport, current->sport))
+		{
+			printf("%-30s%-5d%-19s%-10d%-15s%-9d%-9d%-9d%-9d\n", current->name, current->age, current->country, current->year, current->sport, current->gold, current->silver, current->bronze, current->total);
+		}
+		current = current->next;
+	}
+
+}
